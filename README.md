@@ -1,4 +1,4 @@
-# # Hop_ License Plates (ESX)
+# Hop_ License Plates (ESX)
 FiveM custom license plates for owned vehicles.
 ## Features
 - Custom locations for DMV access
