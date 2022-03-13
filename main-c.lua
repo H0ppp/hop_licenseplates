@@ -18,11 +18,11 @@ end)
 Citizen.CreateThread(function()
     for _, item in pairs(Config.Locations) do
         item.blip = AddBlipForCoord(item.x, item.y, item.z)
-        SetBlipSprite(item.blip, 225)
+        SetBlipSprite(item.blip, 521)
         SetBlipAsShortRange(item.blip, true)
-        SetBlipColour(blip, 47)
-        SetBlipDisplay(blip, 4)
-        SetBlipScale  (blip, 0.8)
+        SetBlipColour(item.blip, 47)
+        SetBlipDisplay(item.blip, 4)
+        SetBlipScale  (item.blip, 0.8)
         BeginTextCommandSetBlipName("STRING")
         AddTextComponentString(item.name)
         EndTextCommandSetBlipName(item.blip)
@@ -91,7 +91,7 @@ function plateCheck(plate, oldPlate) -- Check if requested plate is duplicate/va
                 type = "valid"
             })
         elseif cb == 'error' then -- Plate invalid
-            ESX.ShowNotification("The plate: ".. plate .." is currently not availible.")
+            ESX.ShowNotification("The plate: ".. plate .." is currently not available.")
             SendNUIMessage({
                 type = "notValid"
             })

@@ -5,6 +5,7 @@
     left: 40%;
     top: 40%;
     border: 10px solid grey;
+    border-radius: 5px;
     padding: 10px;
     align-content:center;
     text-align: center;
@@ -31,11 +32,12 @@ input {
   #close:hover {
     opacity: 1;
   }
-  #close:before, #close:after {
+  #close:before, #close:after 
+  {
     position: absolute;
     left: 5px;
     bottom: 0px;
-    top: 0px;
+    top: -2px;
     content: ' ';
     height: 17px;
     width: 2px;

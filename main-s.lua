@@ -29,6 +29,8 @@ ESX.RegisterServerCallback('hop_licenseplates:update', function(source, cb, oldP
                     else 
                         cb('money')
                     end
+                else
+                    cb('unowned')
                 end
             end)
         else 
