@@ -13,7 +13,7 @@ Citizen.CreateThread(function()
 end)
 
 -----------------------------------
--- Blip / Marker
+-- Location Logic
 -----------------------------------
 Citizen.CreateThread(function()
     for _, item in pairs(Config.Locations) do
@@ -53,12 +53,13 @@ end)
 -- DMV Logic
 -----------------------------------
 
+if(Config.CommandEnabled) then -- Register command if Config is true.
+    RegisterCommand("dmv", function()
+        DMV()
+    end, false)
+end
 
-RegisterCommand("dmv", function()
-    DMV()
-end, false)
-
-function DMV()
+function DMV() -- Main NUI call.
     local ped = GetPlayerPed(-1)
     if (IsPedSittingInAnyVehicle(ped)) then
         local plate = GetVehicleNumberPlateText(GetVehiclePedIsIn(ped, false))
@@ -71,7 +72,7 @@ function DMV()
     end
 end
 
-RegisterNUICallback('plateRequest', function(data, cb) -- Execute command from block clicked
+RegisterNUICallback('plateRequest', function(data, cb) -- New plate requested via NUi.
     local newPlate = data.itemId
     local ped = GetPlayerPed(-1)
     local oldPlate = GetVehicleNumberPlateText(GetVehiclePedIsIn(ped, false))
@@ -80,22 +81,24 @@ RegisterNUICallback('plateRequest', function(data, cb) -- Execute command from b
     end
 end)
 
-function plateCheck(plate, oldPlate)
+function plateCheck(plate, oldPlate) -- Check if requested plate is duplicate/valid.
     local ped = GetPlayerPed(-1)
-    ESX.TriggerServerCallback('hop_licenseplates:update', function( cb )
-        if cb == 'confirm' then
+    ESX.TriggerServerCallback('hop_licenseplates:update', function( cb ) -- Check on server side to access database
+        if cb == 'confirm' then -- Plate Valid
             SetVehicleNumberPlateText(GetVehiclePedIsIn(ped, false), plate)
-            ESX.ShowNotification("Vehicle license plate changed too: ".. plate)
+            ESX.ShowNotification("Vehicle license plate changed too: ".. plate .. " for $" .. Config.Cost)
             SendNUIMessage({
                 type = "valid"
             })
-        elseif cb == 'error' then
+        elseif cb == 'error' then -- Plate invalid
             ESX.ShowNotification("The plate: ".. plate .." is currently not availible.")
             SendNUIMessage({
                 type = "notValid"
             })
-        elseif cb == 'money' then
+        elseif cb == 'money' then -- Cannot afford plate
             ESX.ShowNotification("The plate: ".. plate .." is valid but you cannot afford it.")
+        elseif cb == 'unowned' then -- Vehicle isn't owned by player
+            ESX.ShowNotification("You cannot purchase a license plate for a vehicle you don't own.")
         end
       end, oldPlate, plate)
 end
@@ -105,7 +108,7 @@ RegisterNUICallback('close', function(data, cb) -- Return focus on close
     SetNuiFocus(false, false)
 end)
 
-function Hint(text)
+function Hint(text) -- Function for showing prompts.
 	SetTextComponentFormat("STRING")
 	AddTextComponentString(text)
 	DisplayHelpTextFromStringLabel(0, 0, 1, -1)
