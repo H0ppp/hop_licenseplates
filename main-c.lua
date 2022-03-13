@@ -54,9 +54,7 @@ end)
 -----------------------------------
 
 if(Config.CommandEnabled) then -- Register command if Config is true.
-    RegisterCommand("dmv", function()
-        DMV()
-    end, false)
+    RegisterCommand("dmv", DMV(), false)
 end
 
 function DMV() -- Main NUI call.
@@ -73,7 +71,7 @@ function DMV() -- Main NUI call.
     end
 end
 
-RegisterNUICallback('plateRequest', function(data, cb) -- New plate requested via NUi.
+RegisterNUICallback('plateRequest', function(data, cb) -- New plate requested via NUI.
     local newPlate = data.itemId
     local ped = GetPlayerPed(-1)
     local oldPlate = GetVehicleNumberPlateText(GetVehiclePedIsIn(ped, false))
@@ -100,6 +98,8 @@ function plateCheck(plate, oldPlate) -- Check if requested plate is duplicate/va
             ESX.ShowNotification("The plate: ".. plate .." is valid but you cannot afford it.")
         elseif cb == 'unowned' then -- Vehicle isn't owned by player
             ESX.ShowNotification("You cannot purchase a license plate for a vehicle you don't own.")
+        elseif cb == 'number' then -- Vehicle isn't owned by player
+            ESX.ShowNotification("The plate: ".. plate .." is does not contain a number.")
         end
       end, oldPlate, plate)
 end

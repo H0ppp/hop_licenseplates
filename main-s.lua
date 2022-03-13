@@ -15,26 +15,29 @@ ESX.RegisterServerCallback('hop_licenseplates:update', function(source, cb, oldP
                 dupe = true
             end
         end
-    
-        if not dupe then
-            MySQL.Async.fetchAll('SELECT plate, vehicle FROM owned_vehicles WHERE plate = @plate', {['@plate'] = oldplate},
-            function (result)
-                if result[1] ~= nil then
-                    if xPlayer.getMoney() >= 2000 then		
-                        xPlayer.removeMoney(2000)
-                        local vehicle = json.decode(result[1].vehicle)
-                        vehicle.plate = newplate
-                        MySQL.Async.execute('UPDATE owned_vehicles SET plate = @newplate, vehicle = @vehicle WHERE plate = @oldplate', {['@newplate'] = newplate, ['@oldplate'] = oldplate, ['@vehicle'] = json.encode(vehicle)})
-                        cb('confirm')
-                    else 
-                        cb('money')
+        if string.match(newplate, "%d+") ~= nil then
+            if not dupe then
+                MySQL.Async.fetchAll('SELECT plate, vehicle FROM owned_vehicles WHERE plate = @plate', {['@plate'] = oldplate},
+                function (result)
+                    if result[1] ~= nil then
+                        if xPlayer.getMoney() >= 2000 then		
+                            xPlayer.removeMoney(2000)
+                            local vehicle = json.decode(result[1].vehicle)
+                            vehicle.plate = newplate
+                            MySQL.Async.execute('UPDATE owned_vehicles SET plate = @newplate, vehicle = @vehicle WHERE plate = @oldplate', {['@newplate'] = newplate, ['@oldplate'] = oldplate, ['@vehicle'] = json.encode(vehicle)})
+                            cb('confirm')
+                        else 
+                            cb('money')
+                        end
+                    else
+                        cb('unowned')
                     end
-                else
-                    cb('unowned')
-                end
-            end)
+                end)
+            else 
+                cb('error')
+            end
         else 
-            cb('error')
+            cb('number')
         end
     end)
 end)
