@@ -1,6 +1,6 @@
 Config = {}
 
-Config.Cost = 2000 -- The Cost to add a custom plate.
+Config.Cost = 2500 -- The Cost to add a custom plate.
 
 Config.CommandEnabled = false -- Whether the DMV can be accessed by command.
 

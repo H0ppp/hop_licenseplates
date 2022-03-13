@@ -67,6 +67,7 @@ function DMV() -- Main NUI call.
         SetNuiFocus(true, true)
         SendNUIMessage({
             type = "show",
+            price = Config.Cost,
             currentPlate = plate
         })
     end

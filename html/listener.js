@@ -3,6 +3,7 @@ $(function() {
     var $container = $("#container");
     var $oldPlate = $("#oldPlate");
     var $newPlate = $("#newPlate");
+    var $btn = $("#btn");
     $container.hide();
 
 
@@ -12,6 +13,7 @@ $(function() {
 		if (item.type === "show") {
             $container.show();
             $oldPlate.val(item.currentPlate);
+            $btn.html("Purchase ($"+item.price+")");
 	    } else if (item.type === "valid") {
             Close();
 	    } else if (item.type === "notValid") {
