@@ -16,18 +16,19 @@ end)
 -- Location Logic
 -----------------------------------
 Citizen.CreateThread(function()
-    for _, item in pairs(Config.Locations) do
-        item.blip = AddBlipForCoord(item.x, item.y, item.z)
-        SetBlipSprite(item.blip, 521)
-        SetBlipAsShortRange(item.blip, true)
-        SetBlipColour(item.blip, 47)
-        SetBlipDisplay(item.blip, 4)
-        SetBlipScale  (item.blip, 0.8)
-        BeginTextCommandSetBlipName("STRING")
-        AddTextComponentString(item.name)
-        EndTextCommandSetBlipName(item.blip)
+    if (Config.BlipsEnabled) then
+        for _, item in pairs(Config.Locations) do
+            item.blip = AddBlipForCoord(item.x, item.y, item.z)
+            SetBlipSprite(item.blip, 521)
+            SetBlipAsShortRange(item.blip, true)
+            SetBlipColour(item.blip, 47)
+            SetBlipDisplay(item.blip, 4)
+            SetBlipScale  (item.blip, 0.8)
+            BeginTextCommandSetBlipName("STRING")
+            AddTextComponentString(item.name)
+            EndTextCommandSetBlipName(item.blip)
+        end
     end
-
 
     while true do
         Citizen.Wait(5)
